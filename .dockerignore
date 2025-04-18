@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+
+# Build
+build/
+target/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Test files
+*_test.go
+coverage.out
+
+# Temporary files
+tmp/
+temp/
+
+# OS specific
+.DS_Store
+*.swp
+*.swo 
