@@ -1,0 +1,1 @@
+# marketmosaic-product-service-go
