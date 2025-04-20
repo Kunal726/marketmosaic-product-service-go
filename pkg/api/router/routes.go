@@ -1,16 +1,17 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/Kunal726/market-mosaic-common-lib-go/pkg/middleware/auth"
+	"github.com/Kunal726/market-mosaic-common-lib-go/pkg/zookeeper"
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/api/handler"
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/constants"
-	"github.com/Kunal726/market-mosaic-common-lib-go/pkg/middleware/auth"
+	"github.com/gin-gonic/gin"
 )
 
-func RegisterRoutes(router *gin.Engine, handler *handler.ProductHandler, authMiddleware *auth.Middleware) {
+func RegisterRoutes(router *gin.Engine, handler *handler.ProductHandler, authMiddleware *auth.Middleware, zkClient *zookeeper.Client) {
 	// Product routes that require authentication
 	productsGroup := router.Group(constants.ProductBasePath)
-	productsGroup.Use(authMiddleware.ValidateToken()) // Add auth middleware to all product routes
+	productsGroup.Use(authMiddleware.ValidateTokenGrpc(zkClient)) // Add auth middleware to all product routes
 	{
 		// Protected routes (require authentication)
 		productsGroup.POST(constants.ProductRootPath, handler.AddProduct)           // POST /products

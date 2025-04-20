@@ -3,32 +3,37 @@ package repositories
 import (
 	"context"
 	"fmt"
-	"github.com/Kunal726/marketmosaic-product-service-go/pkg/dtos"
-	"github.com/Kunal726/marketmosaic-product-service-go/pkg/models"
 	"strings"
 	"time"
 
+	"github.com/Kunal726/marketmosaic-product-service-go/pkg/dtos"
+	"github.com/Kunal726/marketmosaic-product-service-go/pkg/models"
+
 	"github.com/Kunal726/market-mosaic-common-lib-go/pkg/redis"
+	commonRepo "github.com/Kunal726/market-mosaic-common-lib-go/repository"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 type ProductRepository interface {
-	BaseRepository[models.Product, uint]
+	commonRepo.BaseRepository[models.Product, uint]
 	SoftDelete(logger *zap.Logger, productId uint) error
 	GetProductSuggestions(logger *zap.Logger, query string) ([]string, error)
 	FindByFilters(logger *zap.Logger, filter *dtos.ProductFilterDTO) ([]models.Product, error)
 }
 
 type productRepository struct {
-	BaseRepositoryImpl[models.Product, uint]
+	commonRepo.BaseRepository[models.Product, uint]
 	redisManager *redis.Manager
+	db           *gorm.DB
 }
 
 func NewProductRepository(db *gorm.DB, redisManager *redis.Manager) ProductRepository {
+	baseRepo := commonRepo.NewBaseRepository[models.Product, uint](db)
 	return &productRepository{
-		BaseRepositoryImpl: BaseRepositoryImpl[models.Product, uint]{db: db},
-		redisManager:       redisManager,
+		BaseRepository: baseRepo,
+		redisManager:   redisManager,
+		db:             db,
 	}
 }
 
@@ -53,6 +58,7 @@ func (r *productRepository) FindByID(logger *zap.Logger, id uint) (*models.Produ
 	err = r.db.Preload("Tags").
 		Preload("Category").
 		Preload("Supplier").
+		Preload("Images").
 		First(&product, id).Error
 	if err != nil {
 		logger.Error("Failed to find product by ID",

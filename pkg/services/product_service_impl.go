@@ -2,12 +2,13 @@ package services
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/dtos"
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/errors"
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/repositories"
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/utils"
 	"go.uber.org/zap"
-	"net/http"
 
 	commonDto "github.com/Kunal726/market-mosaic-common-lib-go/pkg/dtos"
 )
@@ -201,8 +202,8 @@ func (s *productService) GetProduct(logger *zap.Logger, productID string) (*dtos
 
 	return &dtos.ProductResponseDTO{
 		BaseResponseDTO: &commonDto.BaseResponseDTO{
-			Status: true,
-			Code: http.StatusOK,
+			Status:  true,
+			Code:    http.StatusOK,
 			Message: "Product Found",
 		},
 		Product: productDTO,

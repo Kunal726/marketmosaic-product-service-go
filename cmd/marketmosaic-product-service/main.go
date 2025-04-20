@@ -39,7 +39,7 @@ func run() error {
 	server := server.NewServer(application.Logger, os.Getenv("PORT"))
 
 	// Setup routes
-	router.RegisterRoutes(server.Engine(), handlers.Product, authMiddleware)
+	router.RegisterRoutes(server.Engine(), handlers.Product, authMiddleware, application.ZKClient)
 
 	// Start server
 	return server.Start()

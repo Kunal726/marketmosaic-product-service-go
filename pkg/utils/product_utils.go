@@ -2,10 +2,11 @@ package utils
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/dtos"
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/models"
 	"github.com/Kunal726/marketmosaic-product-service-go/pkg/repositories"
-	"time"
 
 	"go.uber.org/zap"
 )
@@ -44,7 +45,6 @@ func (p *ProductUtils) MapProductDetails(logger *zap.Logger, product *models.Pro
 		CategoryID:    fmt.Sprintf("%d", product.CategoryId),
 		Price:         product.Price,
 		Description:   product.Description,
-		ImageURL:      product.ImageUrl,
 		IsActive:      &product.IsActive,
 		StockQuantity: product.StockQuantity,
 		SupplierID:    fmt.Sprintf("%d", product.SupplierId),
@@ -131,7 +131,6 @@ func (p *ProductUtils) MapProductEntity(logger *zap.Logger, dto *dtos.ProductDet
 		Description:   dto.Description,
 		DateAdded:     time.Now(),
 		IsActive:      isActive,
-		ImageUrl:      dto.ImageURL,
 		StockQuantity: dto.StockQuantity,
 		SupplierId:    supplierID,
 	}
